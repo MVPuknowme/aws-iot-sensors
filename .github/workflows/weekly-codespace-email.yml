@@ -1,0 +1,41 @@
+name: Weekly Codespace Email
+
+on:
+  schedule:
+    # Runs once weekly: every Monday at 09:00 UTC.
+    - cron: '0 9 * * 1'
+
+env:
+  CODESPACE_URL: https://ominous-broccoli-rjpr96g4x9jcxv76.github.dev/?editor=jupyter
+
+jobs:
+  send-weekly-email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check Codespace URL availability
+        id: codespace_check
+        run: |
+          STATUS_CODE=$(curl -L --max-time 20 --retry 2 --retry-delay 2 -o /dev/null -s -w "%{http_code}" "$CODESPACE_URL")
+          echo "status_code=$STATUS_CODE" >> "$GITHUB_OUTPUT"
+
+      - name: Send weekly status email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          secure: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: Weekly Codespace Check
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_FROM }}
+          body: |
+            This is your weekly automated Codespace status email.
+
+            Codespace URL: ${{ env.CODESPACE_URL }}
+            HTTP status: ${{ steps.codespace_check.outputs.status_code }}
+
+            Triggered by workflow: ${{ github.workflow }}
+            Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

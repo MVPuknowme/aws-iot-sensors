@@ -12,3 +12,15 @@ This repository contains a single Javascript file that will connect to AWS IoT c
 2. [Retrieve certificates for connection](https://docs.aws.amazon.com/iot/latest/developerguide/device-certs-create.html) and put them into this folder
 3. Inside `index.js` replace line 5 to 8 with your own values
 4. Run `node index.js` to start publishing sample data!
+
+## Local interface server
+
+To run a simple web interface/health endpoint (useful for Codespaces or uptime checks):
+
+1. Install dependencies: `npm install`
+2. Start the server: `npm start`
+3. Visit:
+   - `http://localhost:3000/` → `Interface live`
+   - `http://localhost:3000/health` → `{"status":"ok"}`
+
+The server binds to `0.0.0.0` and uses `PORT` when provided.
