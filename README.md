@@ -24,3 +24,19 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
 
+
+## Weekly Codespace email workflow
+
+A GitHub Actions workflow is configured at `.github/workflows/weekly-codespace-email.yml` to:
+
+- check connectivity to `https://ominous-broccoli-rjpr96g4x9jcxv76.github.dev/?editor=jupyter`
+- send an email update once per week (Mondays at 09:00 UTC)
+
+Configure these repository secrets before running it:
+
+- `SMTP_SERVER`
+- `SMTP_PORT`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `EMAIL_TO`
+- `EMAIL_FROM`
